@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-plantpal-dev-fa1db-authRole",
+      "UnauthRoleArn": "arn:aws:iam::122610483469:role/amplify-plantpal-dev-fa1db-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::122610483469:role/amplify-plantpal-dev-fa1db-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-plantpal-dev-fa1db-deployment",
+      "UnauthRoleName": "amplify-plantpal-dev-fa1db-unauthRole",
+      "StackName": "amplify-plantpal-dev-fa1db",
+      "StackId": "arn:aws:cloudformation:us-east-2:122610483469:stack/amplify-plantpal-dev-fa1db/ae100cd0-745e-11ef-8879-02a80325a5e7",
+      "AmplifyAppId": "d1r8tr0d72jpo5"
+    },
+    "categories": {
+      "auth": {
+        "plantpal0862f220": {}
+      }
+    }
+  }
+}
