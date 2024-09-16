@@ -1,39 +1,27 @@
 import React from 'react';
-import './App.css';
-import {Amplify} from 'aws-amplify';
-import { Authenticator, withAuthenticator } from '@aws-amplify/ui-react';
-import '@aws-amplify/ui-react/styles.css';
-import awsExports from './aws-exports';
 import Home from './pages/home';
+import { Amplify } from 'aws-amplify';
+import { withAuthenticator } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
+import config from './amplifyconfiguration.json';
+import { useMyContext } from './MyContext';
 
-Amplify.configure(awsExports);
+Amplify.configure(config);
 
-function App() {
+export function App({ signOut, user }) {
+
+  const { setUser } = useMyContext();
+
+  React.useEffect(() => { // set user upon login
+    if (user) {
+      setUser(user);
+    }
+  }, [user, setUser]);
+
   return (
-    <div className="App">
-      <Authenticator>
-        {({ signOut }) => (
-          <main>
-            <header className='App-header'>
-              {/* Quiz Component */}
-              <Home />
-              {/* Sign Out Button */}
-              <button 
-                onClick={signOut} 
-                style={{ 
-                  margin: '20px', 
-                  fontSize: '0.8rem', 
-                  padding: '5px 10px', 
-                  marginTop: '20px'
-                }}
-              >
-                Sign Out
-              </button>
-            </header>
-          </main>
-        )}
-      </Authenticator>
-    </div>
+    <>
+      <Home signOut={signOut}></Home>
+    </>
   );
 }
 

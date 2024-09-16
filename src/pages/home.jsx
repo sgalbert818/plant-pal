@@ -1,7 +1,17 @@
 import React from "react"
+import { useMyContext } from '../MyContext';
+import Body from "./body"
 
-export default function Home() {
+export default function Home({ signOut }) {
+    const { user } = useMyContext();
+
     return (
-        <h1>Home</h1>
+        <div>
+            <header>
+                <h1>Hello {user?.signInDetails.loginId}</h1>
+                <button onClick={signOut}>Sign out</button>
+            </header>
+            <Body></Body>
+        </div>
     )
 }
