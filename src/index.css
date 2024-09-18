@@ -11,6 +11,35 @@ header {
     border: 1px solid red;
 }
 
-main {
-    padding: 10px 25px;
+.my-plants {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 15px;
+}
+
+.plant {
+    height: 100px;
+    width: 100px;
+    margin: 10px;
+    border: 1px solid red;
+}
+
+.anpi-rb {
+    display: flex;
+}
+
+.plant-rb {
+    border: 1px solid green;
+    width: 70px;
+    height: 70px;
+    padding: 5px;
+}
+
+.plant-rb-img {
+    height: 100%;
+    width: 100%;
+}
+
+.selected-rb {
+    border: 2px solid red;
 }
