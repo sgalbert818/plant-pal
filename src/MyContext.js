@@ -6,7 +6,8 @@ export const MyProvider = ({ children }) => {
   const [user, setUser] = useState(null); // current user
   const [myPlants, setMyPlants] = React.useState(null); // current user list of plants
   const [creating, setCreating] = useState(false); // currently creating new plant
-  const [focus, setFocus] = React.useState(null)
+  const [focus, setFocus] = React.useState(null); // show plant details
+  const [isEditing, setIsEditing] = React.useState(false) // currently editing plant
 
   const value = {
     user,
@@ -16,7 +17,9 @@ export const MyProvider = ({ children }) => {
     creating,
     setCreating,
     focus,
-    setFocus
+    setFocus,
+    isEditing,
+    setIsEditing
   };
 
   return <MyContext.Provider value={value}>{children}</MyContext.Provider>;

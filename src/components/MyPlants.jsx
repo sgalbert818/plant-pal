@@ -10,12 +10,15 @@ export default function MyPlants() {
     }
 
     return (
-        <div className="my-plants">
-            <div className="plant" onClick={clickHandler}>Add new plant!</div>
-            {!myPlants && <div className="plant">Loading plants...</div>}
-            {myPlants && myPlants.map((plant) => {
-                return <Plant key={plant.plantId}>{plant}</Plant>
-            })}
+        <div className="plants-body">
+            {myPlants && <div className="add-plant" onClick={clickHandler}><button className="body-btn">
+                {myPlants.length === 0 ? `Click here to add your first plant!` : `Grow new plant!`}</button></div>}
+            {!myPlants && <div className="add-plant">Searching for plants...</div>}
+            <div className="my-plants">
+                {myPlants && myPlants.length > 0 && myPlants.map((plant) => {
+                    return <Plant key={plant.plantId}>{plant}</Plant>
+                })}
+            </div>
         </div>
     )
 }

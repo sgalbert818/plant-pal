@@ -27,7 +27,13 @@ export function App({ signOut, user }) {
         }
       })
         .then(response => response.json())
-        .then(data => setMyPlants(data.Items.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated))))
+        .then(data => setMyPlants(prev => {
+          if (data.Items) {
+            return data.Items.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated))
+          } else {
+            return []
+          }
+        }))
         .catch(error => console.error('Error:', error));
     }
   }, [user, setMyPlants])

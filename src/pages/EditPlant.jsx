@@ -1,23 +1,58 @@
 import React from "react"
 import { useMyContext } from '../MyContext';
-import { nanoid } from "nanoid";
 
-export default function CreatePlant() {
-    const { setCreating, user, setMyPlants } = useMyContext();
+export default function EditPlant() {
+    const { focus, setIsEditing, setMyPlants, setFocus } = useMyContext();
     const sunlightLabels = ["Dense Shade", "Full Shade", "Partial Sun", "Full Sun"]
     const radioButtons = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13']
     const invokeURL = 'https://6wux2wozxc.execute-api.us-east-2.amazonaws.com/v1';
 
-    const clickHandler = () => { // exit out of 'create plant' UI
-        setCreating(prev => !prev)
+    const discardChanges = (e) => { // go back to focus UI
+        e.preventDefault()
+        setIsEditing(false)
+    }
+
+    const saveChanges = (e) => {
+        e.preventDefault()
+
+        if (!formData.nickname || !formData.type || !formData.wpw) { // if any fields are left empty
+            alert('Please ensure all fields have a value')
+        }
+        const updates = { // create new plant object to push to DB
+            ...formData,
+            plantId: focus.plantId,
+            userId: focus.userId,
+            journalEntries: focus.journalEntries,
+            dateCreated: new Date()
+        }
+
+        fetch(`${invokeURL}/plant`, { // call api to patch plant
+            method: 'PATCH', // PATCH
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updates)
+        })
+            .then(response => response.json())
+            //.then(data => console.log(data.message))
+            .catch(error => console.error('Error:', error));
+
+        setMyPlants((prev) => { // update plants array in state
+            return prev.map((each) => {
+                return each.plantId === focus.plantId ? updates : each
+            })
+        })
+
+        setFocus(updates)
+        setIsEditing(false); // exit "edit plant" UI
     }
 
     const [formData, setFormData] = React.useState({ // form data for creating new plant
-        nickname: '',
-        type: '',
-        wpw: '',
-        sunlight: 0,
-        img: '1'
+        nickname: focus.nickname,
+        type: focus.type,
+        wpw: focus.wpw,
+        sunlight: focus.sunlight,
+        img: focus.img
     });
 
     const handleChange = (event) => { // handler for updating form
@@ -35,50 +70,8 @@ export default function CreatePlant() {
         });
     }
 
-    const submitForm = (e) => {
-        e.preventDefault()
-
-        if (!formData.nickname || !formData.type || !formData.wpw) { // if any fields are left empty
-            alert('Please ensure all fields are filled')
-        }
-        const newPlant = { // create new plant object to push to DB
-            ...formData,
-            plantId: nanoid(),
-            userId: user.userId,
-            journalEntries: [],
-            dateCreated: new Date()
-        }
-
-        fetch(`${invokeURL}/plant`, { // call api to post new plant to DB
-            method: 'POST', // POST
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newPlant)
-        })
-            .then(response => response.json())
-            //.then(data => console.log(data.message))
-            .catch(error => console.error('Error:', error));
-
-        setMyPlants((prev) => {
-            return [newPlant, ...prev]
-        })
-
-        setFormData({ // reset form
-            nickname: '',
-            type: '',
-            wpw: '',
-            sunlight: 0,
-            img: '1'
-        })
-        setCreating(prev => !prev); // exit "create plant" UI
-    }
-
     return (
-        <div className="plants-body">
-            <div className="add-plant">
-                <button className="body-btn" onClick={clickHandler}>Back To All Plants</button>
-            </div>
+        <div>
             <div className="new-plant-form">
                 <form>
                     <div className="four">
@@ -148,11 +141,16 @@ export default function CreatePlant() {
                         />
                         <label htmlFor="reminders"><p>Text me reminders to water this plant? (Disabled in demo version)</p></label>
                     </div>
-                    <div className="add-plant apbb">
-                        <button className="body-btn" onClick={submitForm}>Add Plant!</button>
+                    <div className="split-btns">
+                        <div className="add-plant apbb">
+                            <button className="body-btn" onClick={saveChanges}>Save Changes</button>
+                        </div>
+                        <div className="add-plant apbb">
+                            <button className="body-btn" onClick={discardChanges}>Discard Changes</button>
+                        </div>
                     </div>
                 </form>
             </div>
-        </div >
+        </div>
     )
 }
