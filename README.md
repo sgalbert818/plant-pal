@@ -1,3 +1,9 @@
+Plant Pal is a user-friendly web app designed to help plant enthusiasts keep their green friends thriving! With a sleek React frontend and a powerful serverless backend powered by AWS Lambda and API Gateway, Plant Pal simplifies plant care by allowing users to track their plants and receive automated text message reminders to water them. Hosted on AWS Amplify, the app ensures secure user authentication through AWS Cognito, making it easy to manage your plant collection. Never forget to water your plants again—let Plant Pal be your trusted companion in plant care!
+
+Created by Sarah Albert - sgalbert818@yahoo.com
+
+Live App - https://main.d1r8tr0d72jpo5.amplifyapp.com/
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
