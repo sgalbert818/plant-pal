@@ -8,7 +8,7 @@ export default function CreatePlant() {
     const radioButtons = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13']
     const invokeURL = 'https://6wux2wozxc.execute-api.us-east-2.amazonaws.com/v1';
 
-    
+
     const clickHandler = () => { // exit out of 'create plant' UI
         setCreating(prev => !prev)
     }
@@ -41,38 +41,39 @@ export default function CreatePlant() {
 
         if (!formData.nickname || !formData.type || !formData.wpw) { // if any fields are left empty
             alert('Please ensure all fields are filled')
+        } else {
+            const newPlant = { // create new plant object to push to DB
+                ...formData,
+                plantId: nanoid(),
+                userId: user.userId,
+                journalEntries: [],
+                dateCreated: new Date()
+            }
+
+            fetch(`${invokeURL}/plant`, { // call api to post new plant to DB
+                method: 'POST', // POST
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newPlant)
+            })
+                .then(response => response.json())
+                //.then(data => console.log(data.message))
+                .catch(error => console.error('Error:', error));
+
+            setMyPlants((prev) => {
+                return [newPlant, ...prev]
+            })
+
+            setFormData({ // reset form
+                nickname: '',
+                type: '',
+                wpw: '',
+                sunlight: 0,
+                img: '1'
+            })
+            setCreating(prev => !prev); // exit "create plant" UI
         }
-        const newPlant = { // create new plant object to push to DB
-            ...formData,
-            plantId: nanoid(),
-            userId: user.userId,
-            journalEntries: [],
-            dateCreated: new Date()
-        }
-
-        fetch(`${invokeURL}/plant`, { // call api to post new plant to DB
-            method: 'POST', // POST
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newPlant)
-        })
-            .then(response => response.json())
-            //.then(data => console.log(data.message))
-            .catch(error => console.error('Error:', error));
-
-        setMyPlants((prev) => {
-            return [newPlant, ...prev]
-        })
-
-        setFormData({ // reset form
-            nickname: '',
-            type: '',
-            wpw: '',
-            sunlight: 0,
-            img: '1'
-        })
-        setCreating(prev => !prev); // exit "create plant" UI
     }
 
     return (

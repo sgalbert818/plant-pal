@@ -49,50 +49,51 @@ export default function PlantFocus() {
         e.preventDefault();
         if (!journal) { // if any fields are left empty
             alert('Please enter text in the entry box')
-        }
-        const journalEntry = { // create journal entry object
-            entryId: nanoid(),
-            content: journal,
-            dateCreated: new Date()
-        }
-        const entry = { // create new entry to push to DB
-            plantId: focus.plantId,
-            userId: focus.userId,
-            journalEntry,
-        }
+        } else {
+            const journalEntry = { // create journal entry object
+                entryId: nanoid(),
+                content: journal,
+                dateCreated: new Date()
+            }
+            const entry = { // create new entry to push to DB
+                plantId: focus.plantId,
+                userId: focus.userId,
+                journalEntry,
+            }
 
-        fetch(`${invokeURL}/plant/add-journal`, { // call api to patch plant
-            method: 'PATCH', // PATCH
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(entry)
-        })
-            .then(response => response.json())
-            //.then(data => console.log(data.message))
-            .catch(error => console.error('Error:', error));
+            fetch(`${invokeURL}/plant/add-journal`, { // call api to patch plant
+                method: 'PATCH', // PATCH
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(entry)
+            })
+                .then(response => response.json())
+                //.then(data => console.log(data.message))
+                .catch(error => console.error('Error:', error));
 
-        setMyPlants((prev) => { // add journal entry to plants to update UI
-            return prev.map((plant) => {
-                if (plant.plantId === focus.plantId) {
-                    return {
-                        ...plant,
-                        journalEntries: [journalEntry, ...plant.journalEntries]
+            setMyPlants((prev) => { // add journal entry to plants to update UI
+                return prev.map((plant) => {
+                    if (plant.plantId === focus.plantId) {
+                        return {
+                            ...plant,
+                            journalEntries: [journalEntry, ...plant.journalEntries]
+                        }
+                    } else {
+                        return plant
                     }
-                } else {
-                    return plant
+                })
+            })
+
+            setFocus((prev) => { // update focus state to update UI
+                return {
+                    ...prev,
+                    journalEntries: [journalEntry, ...prev.journalEntries]
                 }
             })
-        })
 
-        setFocus((prev) => { // update focus state to update UI
-            return {
-                ...prev,
-                journalEntries: [journalEntry, ...prev.journalEntries]
-            }
-        })
-
-        setJournal('') // reset form
+            setJournal('') // reset form
+        }
     }
 
     return (
