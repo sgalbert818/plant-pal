@@ -8,6 +8,7 @@ export default function CreatePlant() {
     const radioButtons = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13']
     const invokeURL = 'https://6wux2wozxc.execute-api.us-east-2.amazonaws.com/v1';
 
+    
     const clickHandler = () => { // exit out of 'create plant' UI
         setCreating(prev => !prev)
     }
